@@ -20,3 +20,4 @@
 - @RequestParam 如果没有这个注解非必传，可以通过@RequestParam(required = false)设置为非必传。因为required值默认是true，所以默认必传
   - 可以通过@RequestParam("userId")或者@RequestParam(value = "userId")指定参数名
   - 可以通过@RequestParam(defaultValue = "0")指定参数默认值
+- 有一个地方很奇怪spring boot 版本为 2.2.1时会报 classnotfound 改成 2.1.3 问题解决。。。。
