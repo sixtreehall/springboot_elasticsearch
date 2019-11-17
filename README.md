@@ -1,0 +1,21 @@
+# springboot+elasticsearch开发
+- ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口
+- Elasticsearch是用Java语言开发的，并作为Apache许可条款下的开放源码发布，是一种流行的企业级搜索引擎
+- Elasticsearch可以作为nosql辅助数据库来使用，项目主要测试 Elasticsearch的数据库功能
+- @Document 其对于Elasticsearch的文档（@Document）的数据的操作就类似于JPA中对于数据库表（@Entity）的接口。可以用findByXX的方式进行查询，也可以自定义@Query()方式进行查询
+  - String indexName(); //索引库名，建议以项目名称命名
+  - String type() default ""; //类型，建议以实体类名称命名
+- application.properties配置文件
+  - spring.data.elasticsearch.cluster-nodes 集群节点地址列表，用逗号分隔。如果没有指定，就启动一个客户端节点。
+  - spring.data.elasticsearch.repositories.enabled 开启 Elasticsearch 仓库。(默认值:true）
+- 关于springdata jpa（ElasticsearchRepository）
+  - 对于需要分页的sql（jpa提供接口 返回值为Page<封装的实体类> 注入Pageable 控制分页的信息）
+  - 对于Elasticsearch的sql语句需要转换为 QueryStringQueryBuilder query =new QueryStringQueryBuilder(searchContent)
+  - Pageable pageable需要装载上PageRequest.of(pageNumber,pageSize) 实现分页的基本页码和页长 
+  - 如果是分页serach（searchQuery）可以在QueryStringQueryBuilder之后加上SearchQuery searchQuery = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(builder).build();可以把pageable和builder封装在一起
+  或者采用search（builder，pageable）分开加载
+  - 分页之后返回值为Page<User>(getContent())，把Page<User>转化为List<User>
+  - 关于搜索权重。。。以后再研究把。。。
+- @RequestParam 如果没有这个注解非必传，可以通过@RequestParam(required = false)设置为非必传。因为required值默认是true，所以默认必传
+  - 可以通过@RequestParam("userId")或者@RequestParam(value = "userId")指定参数名
+  - 可以通过@RequestParam(defaultValue = "0")指定参数默认值
